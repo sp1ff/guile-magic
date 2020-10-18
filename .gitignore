@@ -1,0 +1,6 @@
+README
+aclocal.m4
+autom4te.cache
+build-aux
+configure
+Makefile.in

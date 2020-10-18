@@ -1,0 +1,51 @@
+#+TITLE: README
+#+DESCRIPTION: Guile bindings for libmagic
+#+AUTHOR: Michael
+#+EMAIL: sp1ff@pobox.com
+#+DATE: <2020-10-18 Sun 18:30>
+#+AUTODATE: t
+
+* Introduction
+
+[[https://github.com/sp1ff/guile-magic][guile-magic]] provides bindings to [[https://linux.die.net/man/3/libmagic][libmagic]] (the library that provides the core logic to the [[http://www.darwinsys.com/file/][file]] command) for [[https://www.gnu.org/software/guile/][Guile]] Scheme.
+* Prerequisites
+
+  - Guile 2.2 or 3.0
+  - libmagic (the package is called =libmagic-dev= on Ubuntu & =libmagic= in Homebrew; YMMV)
+* Installing
+
+#+BEGIN_SRC bash
+  cd /tmp
+  curl -L -O https://github.com/sp1ff/guile-magic/archive/1.0.0.tar.gz
+  tar xf 1.0.0.tar.gz
+  cd guile-magic-1.0.0
+  ./configure && make all check
+  sudo make install
+#+END_SRC
+* Getting Started
+
+The API is designed to be simple:
+
+#+BEGIN_SRC elisp
+  scheme@(guile-user)> (use-modules (magic))
+  scheme@(guile-user)> (magic-file-type "/usr/bin/file")
+  $2 = "ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 3.2.0, BuildID[sha1]=2b26928f841d92afa31613c2c916a3abc96bbed8, stripped"
+#+END_SRC
+
+should produce the same output as invoking the =file= command with no options.
+
+That said, all the features exposed by [[https://linux.die.net/man/3/libmagic][libmagic]] are available:
+
+#+BEGIN_SRC elisp
+  (use-modules (magic))
+  (let ((some-file "my-file")
+        (m (make-magic-set #:opts (list magic-symlinks magic-compress)
+                           #:magic "my-cool-magic-file"
+                           #:params '((magic-param-indir-max . 32)))))
+    (format #t "~a\n" (magic-file m some-file))
+    (format #t "~a\n" (magic-buffer m my-bytevector))) ;; just drop `m' on the floor-- it will be cleaned-up
+#+END_SRC
+
+* Status & Roadmap
+
+Although this is a new Scheme module, it _is_ feature-complete inasmuch as it exposes nearly all of the features exposed by [[https://linux.die.net/man/3/libmagic][libmagic]]. Therefore, aside from bugfixes, I don't foresee significant new development.

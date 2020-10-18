@@ -1,0 +1,2 @@
+#!/bin/sh
+guile --no-auto-compile -L ${abs_top_srcdir} -L ${abs_top_builddir} -s ${srcdir}/test-magic.scm
