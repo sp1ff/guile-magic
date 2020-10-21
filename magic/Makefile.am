@@ -50,6 +50,3 @@ magic.go: magic.scm  $(abs_top_builddir)/magic/vars.scm
 
 $(builddir)/vars.go: vars.scm
 	$(AM_V_GEN)$(GUILD) compile -L $(srcdir)/.. -L $(abs_top_builddir) $(GUILD_WARNINGS) -o "$@" "$<"
-
-$(srcdir)/vars.scm: $(builddir)/vars.scm
-	cp -v $(builddir)/magic/vars.scm $(srcdir)/magic/vars.scm

@@ -1,4 +1,4 @@
-AC_INIT([guile-magic], [1.0.0], [sp1ff@pobox.com], [guile-magic], [https://github.com/sp1ff/guile-magic])
+AC_INIT([guile-magic], [1.0.1], [sp1ff@pobox.com], [guile-magic], [https://github.com/sp1ff/guile-magic])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIRS([build-aux])
 AC_CONFIG_SRCDIR([magic/magic.scm])
