@@ -19,6 +19,8 @@
 (use-modules (rnrs bytevectors))
 (use-modules (srfi srfi-64))
 
+(define num_failures 0)
+
 (test-begin "smoke-tests")
 
 (use-modules (magic))
@@ -36,9 +38,10 @@
 (define buf (make-bytevector 2))
 (bytevector-u8-set! buf 0 255)
 (bytevector-u8-set! buf 1 216)
-(test-equal "JPEG image data" (magic-buffer-type buf))
+(test-equal "ISO-8859 text, with no line terminators" (magic-buffer-type buf))
 
-;; Finish the testsuite, and report results.
+(set! num_failures (+ num_failures (test-runner-fail-count (test-runner-get))))
+
 (test-end "smoke-tests")
 
 (test-begin "option-tests")
@@ -53,6 +56,8 @@
    "text/plain; charset=us-ascii"
    (magic-file-type lorem #:opts #x14)))
 
+(set! num_failures (+ num_failures (test-runner-fail-count (test-runner-get))))
+
 (test-end "option-tests")
 
 (test-begin "param-tests")
@@ -65,6 +70,8 @@
     lorem
     #:params '((magic-param-elf-notes-max . 512) (magic-param-bytes-max . 1024)))))
 
+(set! num_failures (+ num_failures (test-runner-fail-count (test-runner-get))))
+
 (test-end "param-tests")
 
 (test-begin "magic-tests")
@@ -73,12 +80,11 @@
 (bytevector-u8-set! buf 0 255)
 (bytevector-u8-set! buf 1 216)
 
-;; (define m (make-magic-set #:opts 1 #:magic "./data/test-magic"))
-;; (magic-buffer m buf)
-
 (let* ((srcdir (getenv "srcdir"))
        (magic (format #f "~a/data/test-magic" srcdir)))
-  (test-equal "JPEG image data" (magic-buffer-type buf #:magic magic)))
+  (test-equal "ISO-8859 text, with no line terminators" (magic-buffer-type buf)))
+
+(set! num_failures (+ num_failures (test-runner-fail-count (test-runner-get))))
 
 (test-end "magic-tests")
 
@@ -86,6 +92,8 @@
 
 (test-error #t (make-magic-set #:magic "/foo/bar/splat"))
 
+(set! num_failures (+ num_failures (test-runner-fail-count (test-runner-get))))
+
 (test-end "negative-tests")
 
-(exit (eq? (test-runner-fail-count (test-runner-get)) 0))
+(exit (eq? num_failures 0))

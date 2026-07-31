@@ -1,0 +1,76 @@
+# Simple workflow to build the package, execute unit tests & check the tarball. Runs:
+#
+# - on demand
+# - on push
+# - on PR (open, edit or re-open)
+# - nightly at 02:45 UTC 
+name: guile-magic Continuous Integration
+on:
+  workflow_dispatch:
+  # Per
+  # <https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request>:
+  # "if no activity types are specified, the workflow runs when a pull
+  # request is opened or reopened or when the head branch of the pull
+  # request is updated." That said, I've had difficulty getting workflows to trigger on PRs.
+  pull_request:
+    types: [opened, edited, reopened] # don't say `synchronize`-- that is taken care of by `push`
+  push:
+  schedule:
+    - cron: '45 02 * * *'
+  
+jobs:
+
+  # These will run in `/home/runner/work/guile-magic/guile-magic`
+  lint_build_and_test:
+    name: Lint, Build & Test
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        
+      - name: Install Tools (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+        run: |
+            pwd
+            set -euxo pipefail
+            sudo apt-get update
+            sudo apt-get install -y autoconf automake
+
+      - name: Install Tools (macOS)
+        if: matrix.os == 'macos-latest'
+        shell: bash
+        run: |
+            pwd
+            set -euxo pipefail
+            # This seems wrong on multiple levels, but see here:
+            # <https://github.com/orgs/Homebrew/discussions/4612#discussioncomment-6339258>
+            brew cleanup
+            # Will exit with non-zero status if it finds problems, but can be handy
+            # for trouble-shooting:
+            brew doctor
+            brew update
+            brew upgrade
+            set -e
+            brew install autoconf automake
+
+      # Un-comment this step to enable ssh-ing into the runner & troubleshooting:
+      # - name: Setup tmate session
+      #   if: matrix.os == 'macos-latest'
+      #   uses: mxschmitt/action-tmate@v3
+
+      - name: Run Linters
+        shell: bash
+        run: |
+          set -euxo pipefail
+          admin/run-linters
+
+      - name: Build, run the unit tests along with distcheck
+        shell: bash
+        run: |
+          set -euxo pipefail
+          admin/configure-to-distcheck

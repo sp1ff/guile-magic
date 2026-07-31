@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# This script is designed to be run either locally by the developer, or as part
+# of a Github action.
+
+set -eou pipefail
+
+if find . -not -path '*/.git/*' \
+        -not -path '*/autom4te.cache/*' \
+        -not -name '*~' -iname '*.scm' \
+        -print0|xargs -0 -e grep 'TODO|TOOD|LATER|DEBUG|IN-?PROGRESS|\\todo'; then
+    echo "You have TODOs" >&2
+    exit 1
+fi
+
+# I wish I had some more linters for Guile Scheme.
+

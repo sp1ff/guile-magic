@@ -1,4 +1,4 @@
-;;; magic.scm --- low-level interface libmagic
+;;; magic.scm --- low-level interface to libmagic
 
 ;; Copyright (C) 2020 Michael Herstine <sp1ff@pobox.com>
 
