@@ -2,7 +2,7 @@
 #+DESCRIPTION: Guile bindings for libmagic
 #+AUTHOR: Michael
 #+EMAIL: sp1ff@pobox.com
-#+DATE: <2020-10-18 Sun 18:30>
+#+DATE: <2026-07-31 Fri 17:46>
 #+AUTODATE: t
 
 * Introduction
@@ -48,4 +48,4 @@ That said, all the features exposed by [[https://linux.die.net/man/3/libmagic][l
 
 * Status & Roadmap
 
-Although this is a new Scheme module, it _is_ feature-complete inasmuch as it exposes nearly all of the features exposed by [[https://linux.die.net/man/3/libmagic][libmagic]]. Therefore, aside from bugfixes, I don't foresee significant new development.
+The package exposes nearly all of the features exposed by [[https://linux.die.net/man/3/libmagic][libmagic]]. Therefore, aside from bugfixes, I don't foresee significant new development.
