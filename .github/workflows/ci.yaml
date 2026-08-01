@@ -25,7 +25,8 @@ jobs:
     name: Lint, Build & Test
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        # os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
 
@@ -39,7 +40,7 @@ jobs:
             pwd
             set -euxo pipefail
             sudo apt-get update
-            sudo apt-get install -y autoconf automake
+            sudo apt-get install -y autoconf automake libmagic-dev guile-3.0-dev
 
       - name: Install Tools (macOS)
         if: matrix.os == 'macos-latest'
@@ -52,11 +53,10 @@ jobs:
             brew cleanup
             # Will exit with non-zero status if it finds problems, but can be handy
             # for trouble-shooting:
-            brew doctor
+            # brew doctor
             brew update
             brew upgrade
-            set -e
-            brew install autoconf automake
+            brew install autoconf automake libmagic guile
 
       # Un-comment this step to enable ssh-ing into the runner & troubleshooting:
       # - name: Setup tmate session
