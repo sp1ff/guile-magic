@@ -2,5 +2,7 @@ guile-magic News -- history of user-visible changes           -*- outline -*-
 
 * 1.0.1 release: Refresh
 
+No functional changes or bugfixes; just a hygienic release.
+
 * 1.0.0 release: Initial release
 

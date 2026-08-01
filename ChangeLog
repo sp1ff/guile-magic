@@ -1,3 +1,18 @@
+2026-07-31  Michael Herstine  <sp1ff@pobox.com>
+
+	Pre-merge commit
+
+	Get continuous integration working
+
+	Update copyrights
+
+	Add linters & CI.
+	This is a hygienic commit.
+
+2020-10-21  Michael Herstine  <sp1ff@pobox.com>
+
+	Cleanup: removed some dead code from magic/Makefile.am.
+
 2020-10-18  Michael Herstine  <sp1ff@pobox.com>
 
 	Initial commit of 'guile-magic'.
